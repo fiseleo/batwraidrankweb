@@ -62,7 +62,7 @@ body {
 .main-content {
     padding: 20px;
     color: white; /* 设置文本颜色为白色以在深色背景上更清晰 */
-    background-color: rgba(0, 0, 0, 0.5); /* 设置背景为半透明，确保文本可读性 */
+    background-color: rgba(0, 0, 0, 0.8); /* 设置背景为半透明，确保文本可读性 */
     border-radius: 10px; /* 给内容区域增加圆角 */
     max-width: 720px; /* 设置最大宽度 */
     margin: 20px auto; /* 居中对齐 */

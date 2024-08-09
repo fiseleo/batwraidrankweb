@@ -13,7 +13,6 @@ document.addEventListener("DOMContentLoaded", function() {
         .then(data => {
             raidBossGroupMap = data;
 
-            // 加载机甲名称 JSON 文件
             return fetch(mechNamesURL);
         })
         .then(response => response.json())
@@ -26,12 +25,12 @@ document.addEventListener("DOMContentLoaded", function() {
         })
         .catch(error => console.error('Error loading JSON files:', error));
 
-    // 转换函数
     function convertRaidBossGroupName(groupName) {
         const parts = groupName.split('_');
         let environment = '';
         let mech = '';
         let armorType = '';
+        let originalMechPart = ''; // 用于保存原始的mech部分
 
         parts.forEach(part => {
             if (raidBossGroupMap[part]) {
@@ -39,40 +38,52 @@ document.addEventListener("DOMContentLoaded", function() {
                     environment = raidBossGroupMap[part];
                 } else if (mechNames.includes(part)) {
                     mech = raidBossGroupMap[part];
+                    originalMechPart = part; // 保存原始的mech部分
                 } else {
                     armorType = raidBossGroupMap[part];
+                    switch (part) {
+                        case "LightArmor":
+                            armorColor = 'red';
+                            break;
+                        case "HeavyArmor":
+                            armorColor = 'yellow';
+                            break;
+                        case "Unarmed":
+                            armorColor = 'blue';
+                            break;
+                        case "ElasticArmor":
+                            armorColor = 'purple';
+                            break;   
+                    }
                 }
             }
         });
 
-        return `${environment}${mech}${armorType}`;
+        return {
+            displayName: `${environment}${mech}<span style="color: ${armorColor};">${armorType}</span>`,
+            mechPart: originalMechPart // 返回原始的mech部分
+        };
     }
 
     function fetchAndDisplayData(url, isEliminate) {
         fetch(url)
             .then(response => response.json())
             .then(data => {
-                // 获取最近的季节
                 const closestSeason = data.reduce((closest, current) => {
                     const closestDate = new Date(closest.SeasonStartData);
                     const currentDate = new Date(current.SeasonStartData);
                     return (currentDate > closestDate) ? current : closest;
                 });
 
-                // 将 UTC+9 的时间转换为 UTC+8
                 const startDate = new Date(closestSeason.SeasonStartData);
                 const endDate = new Date(closestSeason.SeasonEndData);
-
-                // 减少 1 小时以转换为 UTC+8
                 startDate.setHours(startDate.getHours() - 1);
                 endDate.setHours(endDate.getHours() - 1);
 
-                // 使用toLocaleString来格式化时间，确保输出正确的本地时间格式
                 const options = { year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' };
                 const formattedStartDate = startDate.toLocaleString('zh-TW', options);
                 const formattedEndDate = endDate.toLocaleString('zh-TW', options);
 
-                // 选择要显示的字段
                 let raidBossGroups;
                 if (isEliminate) {
                     raidBossGroups = [
@@ -84,15 +95,51 @@ document.addEventListener("DOMContentLoaded", function() {
                     raidBossGroups = closestSeason.OpenRaidBossGroup;
                 }
 
-                // 显示结果
                 const displayDiv = document.getElementById('raid-boss-group');
-                displayDiv.innerHTML = `<h2>Season Start Date: ${formattedStartDate}</h2>`;
-                displayDiv.innerHTML += `<h2>Season End Date: ${formattedEndDate}</h2>`;
+                displayDiv.innerHTML = `<h2>開始時間: ${formattedStartDate}</h2>`;
+                displayDiv.innerHTML += `<h2>結束時間: ${formattedEndDate}</h2>`;
+                // 创建“目前開放”行的容器
+                const openNowContainer = document.createElement('div');
+                openNowContainer.style.display = 'flex';
+                openNowContainer.style.alignItems = 'center';
                 
+                // 添加“目前開放:”文本
+                const openNowText = document.createElement('h2');
+                openNowText.textContent = '目前開放的是:';
+                openNowContainer.appendChild(openNowText);
+
+                // 添加图片
+                let imageLoaded = false;
                 raidBossGroups.forEach(group => {
-                    const convertedName = convertRaidBossGroupName(group);
-                    displayDiv.innerHTML += `<p>${convertedName}</p>`;
+                    const { displayName, mechPart } = convertRaidBossGroupName(group);
+                    
+                    if (!imageLoaded) {
+                        const imgFileName = `Raidboss_${mechPart}.png`;  // 使用原始mech部分生成文件名
+                        const imgFilePath = `icon/${imgFileName}`;  // 根据实际路径调整
+
+                        const img = document.createElement('img');
+                        img.src = imgFilePath;
+                        img.alt = `${displayName} Image`;
+                        img.style.width = '100px'; // 设定图片宽度
+                        img.style.marginLeft = '10px'; // 添加图片和文字之间的间距
+
+                        openNowContainer.appendChild(img);
+                        imageLoaded = true;  // 确保只加载一次图片
+                    }
+
+                    // 添加每个开放项目的名称
+                    const groupContainer = document.createElement('div');
+                    groupContainer.style.display = 'flex';
+                    groupContainer.style.alignItems = 'center';
+
+                    const textElement = document.createElement('p');
+                    textElement.innerHTML = displayName;
+                    groupContainer.appendChild(textElement);
+                    displayDiv.appendChild(groupContainer);
                 });
+
+                // 将“目前開放:”行添加到页面
+                displayDiv.prepend(openNowContainer);
 
                 // 添加倒计时
                 addCountdown(startDate);
@@ -115,13 +162,19 @@ document.addEventListener("DOMContentLoaded", function() {
                 const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
                 const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
 
-                countdownDiv.innerHTML = `倒數計時: ${days}天 ${hours}時 ${minutes}分 ${seconds}秒`;
+                countdownDiv.innerHTML = `
+                倒數計時:
+                <span style="color: red;">${days}</span>天 
+                <span style="color: red;">${hours}</span>時  
+                <span style="color: red;">${minutes}</span>分 
+                <span style="color: red;">${seconds}</span>秒
+                `;
             } else {
                 countdownDiv.innerHTML = "已經開始！";
             }
         }
 
         updateCountdown();
-        setInterval(updateCountdown, 1000); // 每秒更新一次倒计时
+        setInterval(updateCountdown, 1000);
     }
 });
