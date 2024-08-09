@@ -1,0 +1,70 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: row;
+    transition: margin-left 0.5s;
+}
+
+.menu-btn {
+    position: fixed;
+    left: 10px;
+    top: 10px;
+    font-size: 24px;
+    cursor: pointer;
+    z-index: 1001;
+    color: white;
+    background-color: #333;
+    padding: 10px 15px;
+    border-radius: 5px;
+    border: none;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 添加阴影效果 */
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.menu-btn:hover {
+    background-color: #555;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* 鼠标悬停时增加阴影效果 */
+}
+.side-menu {
+    height: 100%;
+    width: 250px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: #111;
+    overflow-x: hidden;
+    padding-top: 60px;
+    transition: transform 0.5s ease;
+    transform: translateX(-250px); /* 初始状态下隐藏在左侧 */
+    z-index: 1000;
+}
+
+.side-menu a {
+    padding: 10px 15px;
+    text-decoration: none;
+    font-size: 20px;
+    color: white;
+    display: block;
+    transition: 0.3s;
+}
+
+.side-menu a:hover {
+    background-color: #575757;
+}
+
+.side-menu.active {
+    transform: translateX(0);
+}
+
+.main-content {
+    flex-grow: 1;
+    padding: 20px;
+    margin-left: 520px; /* 默认情况下给内容留出足够的左边距 */
+    transition: margin-left 0.5s ease;
+}
+
+.main-content.active {
+    margin-left: 700px; /* 菜单展开时，将内容区域进一步右移 */
+}
