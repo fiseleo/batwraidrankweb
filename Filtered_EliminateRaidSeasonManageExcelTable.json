@@ -1,0 +1,102 @@
+[
+    {
+        "SeasonId": 1,
+        "SeasonDisplay": 0,
+        "SeasonStartData": "2021-01-30 04:00:00",
+        "SeasonEndData": "2021-01-30 23:59:59",
+        "SettlementEndDate": "2021-01-31 23:59:59",
+        "OpenRaidBossGroup01": "Binah_Street_LightArmor",
+        "OpenRaidBossGroup02": "Binah_Street_HeavyArmor",
+        "OpenRaidBossGroup03": "Binah_Street_Unarmed"
+    },
+    {
+        "SeasonId": 2,
+        "SeasonDisplay": 0,
+        "SeasonStartData": "2023-12-26 11:00:00",
+        "SeasonEndData": "2024-01-02 03:59:59",
+        "SettlementEndDate": "2024-01-02 23:59:59",
+        "OpenRaidBossGroup01": "Binah_Street_LightArmor",
+        "OpenRaidBossGroup02": "Binah_Street_HeavyArmor",
+        "OpenRaidBossGroup03": "Binah_Street_Unarmed"
+    },
+    {
+        "SeasonId": 3,
+        "SeasonDisplay": 0,
+        "SeasonStartData": "2024-01-16 11:00:00",
+        "SeasonEndData": "2024-01-23 03:59:59",
+        "SettlementEndDate": "2024-01-23 23:59:59",
+        "OpenRaidBossGroup01": "Kaitenger_Street_LightArmor",
+        "OpenRaidBossGroup02": "Kaitenger_Street_HeavyArmor",
+        "OpenRaidBossGroup03": "Kaitenger_Street_Unarmed"
+    },
+    {
+        "SeasonId": 4,
+        "SeasonDisplay": 1,
+        "SeasonStartData": "2024-02-20 11:00:00",
+        "SeasonEndData": "2024-02-27 03:59:59",
+        "SettlementEndDate": "2024-02-27 23:59:59",
+        "OpenRaidBossGroup01": "Perorozilla_Outdoor_LightArmor",
+        "OpenRaidBossGroup02": "Perorozilla_Outdoor_HeavyArmor",
+        "OpenRaidBossGroup03": "Perorozilla_Outdoor_Unarmed"
+    },
+    {
+        "SeasonId": 5,
+        "SeasonDisplay": 2,
+        "SeasonStartData": "2024-03-19 11:00:00",
+        "SeasonEndData": "2024-03-26 03:59:59",
+        "SettlementEndDate": "2024-03-26 23:59:59",
+        "OpenRaidBossGroup01": "ShiroKuro_Indoor_LightArmor",
+        "OpenRaidBossGroup02": "ShiroKuro_Indoor_HeavyArmor",
+        "OpenRaidBossGroup03": "ShiroKuro_Indoor_Unarmed"
+    },
+    {
+        "SeasonId": 6,
+        "SeasonDisplay": 3,
+        "SeasonStartData": "2024-04-23 11:00:00",
+        "SeasonEndData": "2024-04-30 03:59:59",
+        "SettlementEndDate": "2024-04-30 23:59:59",
+        "OpenRaidBossGroup01": "Kaitenger_Outdoor_LightArmor",
+        "OpenRaidBossGroup02": "Kaitenger_Outdoor_HeavyArmor",
+        "OpenRaidBossGroup03": "Kaitenger_Outdoor_Unarmed"
+    },
+    {
+        "SeasonId": 7,
+        "SeasonDisplay": 4,
+        "SeasonStartData": "2024-05-21 11:00:00",
+        "SeasonEndData": "2024-05-28 03:59:59",
+        "SettlementEndDate": "2024-05-28 23:59:59",
+        "OpenRaidBossGroup01": "HOD_Street_LightArmor",
+        "OpenRaidBossGroup02": "HOD_Street_HeavyArmor",
+        "OpenRaidBossGroup03": "HOD_Street_Unarmed"
+    },
+    {
+        "SeasonId": 8,
+        "SeasonDisplay": 5,
+        "SeasonStartData": "2024-06-18 11:00:00",
+        "SeasonEndData": "2024-06-25 03:59:59",
+        "SettlementEndDate": "2024-06-25 23:59:59",
+        "OpenRaidBossGroup01": "Goz_Outdoor_LightArmor",
+        "OpenRaidBossGroup02": "Goz_Outdoor_HeavyArmor",
+        "OpenRaidBossGroup03": "Goz_Outdoor_Unarmed"
+    },
+    {
+        "SeasonId": 9,
+        "SeasonDisplay": 6,
+        "SeasonStartData": "2024-07-16 11:00:00",
+        "SeasonEndData": "2024-07-23 03:59:59",
+        "SettlementEndDate": "2024-07-23 23:59:59",
+        "OpenRaidBossGroup01": "ShiroKuro_Street_LightArmor",
+        "OpenRaidBossGroup02": "ShiroKuro_Street_HeavyArmor",
+        "OpenRaidBossGroup03": "ShiroKuro_Street_Unarmed"
+    },
+    {
+        "SeasonId": 10,
+        "SeasonDisplay": 7,
+        "SeasonStartData": "2024-08-13 11:00:00",
+        "SeasonEndData": "2024-08-20 03:59:59",
+        "SettlementEndDate": "2024-08-20 23:59:59",
+        "OpenRaidBossGroup01": "Kaitenger_Outdoor_LightArmor",
+        "OpenRaidBossGroup02": "Kaitenger_Outdoor_HeavyArmor",
+        "OpenRaidBossGroup03": "Kaitenger_Outdoor_Unarmed"
+    }
+]

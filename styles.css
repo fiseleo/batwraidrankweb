@@ -2,9 +2,12 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    display: flex;
-    flex-direction: row;
-    transition: margin-left 0.5s;
+    background-image: url('Main.png');
+    background-size: cover; /* 使背景图片覆盖整个页面 */
+    background-position: center; /* 居中对齐背景图片 */
+    background-repeat: no-repeat; /* 防止背景图片重复 */
+    background-attachment: fixed; /* 背景图片固定在页面，不随内容滚动 */
+    height: 100vh; /* 让背景覆盖整个视窗高度 */
 }
 
 .menu-btn {
@@ -14,13 +17,11 @@ body {
     font-size: 24px;
     cursor: pointer;
     z-index: 1001;
-    color: white;
-    background-color: #333;
+    color: white; /* 白色按钮文字 */
+    background-color: rgba(0, 0, 0, 0.7); /* 按钮背景为半透明黑色 */
     padding: 10px 15px;
     border-radius: 5px;
     border: none;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 添加阴影效果 */
-    transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .menu-btn:hover {
@@ -59,10 +60,12 @@ body {
 }
 
 .main-content {
-    flex-grow: 1;
     padding: 20px;
-    margin-left: 520px; /* 默认情况下给内容留出足够的左边距 */
-    transition: margin-left 0.5s ease;
+    color: white; /* 设置文本颜色为白色以在深色背景上更清晰 */
+    background-color: rgba(0, 0, 0, 0.5); /* 设置背景为半透明，确保文本可读性 */
+    border-radius: 10px; /* 给内容区域增加圆角 */
+    max-width: 720px; /* 设置最大宽度 */
+    margin: 20px auto; /* 居中对齐 */
 }
 
 .main-content.active {
