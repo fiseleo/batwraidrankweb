@@ -93,7 +93,35 @@ document.addEventListener("DOMContentLoaded", function() {
                     const convertedName = convertRaidBossGroupName(group);
                     displayDiv.innerHTML += `<p>${convertedName}</p>`;
                 });
+
+                // 添加倒计时
+                addCountdown(startDate);
             })
             .catch(error => console.error('Error loading the JSON file:', error));
+    }
+
+    function addCountdown(startDate) {
+        const countdownDiv = document.createElement('div');
+        countdownDiv.id = 'countdown';
+        document.getElementById('raid-boss-group').appendChild(countdownDiv);
+
+        function updateCountdown() {
+            const now = new Date();
+            const timeDifference = startDate - now;
+
+            if (timeDifference > 0) {
+                const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
+
+                countdownDiv.innerHTML = `倒數計時: ${days}天 ${hours}時 ${minutes}分 ${seconds}秒`;
+            } else {
+                countdownDiv.innerHTML = "已經開始！";
+            }
+        }
+
+        updateCountdown();
+        setInterval(updateCountdown, 1000); // 每秒更新一次倒计时
     }
 });
