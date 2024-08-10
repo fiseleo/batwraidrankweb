@@ -1,0 +1,141 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-image: url('Main.png');
+    background-size: cover; /* 使背景图片覆盖整个页面 */
+    background-position: center; /* 居中对齐背景图片 */
+    background-repeat: no-repeat; /* 防止背景图片重复 */
+    background-attachment: fixed; /* 背景图片固定在页面，不随内容滚动 */
+    height: 100vh; /* 让背景覆盖整个视窗高度 */
+}
+
+.menu-btn {
+    position: fixed;
+    left: 10px;
+    top: 10px;
+    font-size: 24px;
+    cursor: pointer;
+    z-index: 1001;
+    color: white; /* 白色按钮文字 */
+    background-color: rgba(0, 0, 0, 0.7); /* 按钮背景为半透明黑色 */
+    padding: 10px 15px;
+    border-radius: 5px;
+    border: none;
+}
+
+.menu-btn:hover {
+    background-color: #555;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* 鼠标悬停时增加阴影效果 */
+}
+
+.side-menu {
+    height: 100%;
+    width: 250px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: #111;
+    overflow-x: hidden;
+    padding-top: 60px;
+    transition: transform 0.5s ease;
+    transform: translateX(-250px); /* 初始状态下隐藏在左侧 */
+    z-index: 1000;
+}
+
+.side-menu a {
+    padding: 10px 15px;
+    text-decoration: none;
+    font-size: 20px;
+    color: white;
+    display: block;
+    transition: 0.3s;
+}
+
+.side-menu a:hover {
+    background-color: #575757;
+}
+
+.side-menu.active {
+    transform: translateX(0);
+}
+
+.main-content {
+    padding: 20px;
+    color: white; /* 设置文本颜色为白色以在深色背景上更清晰 */
+    background-color: rgba(0, 0, 0, 0.8); /* 设置背景为半透明，确保文本可读性 */
+    border-radius: 10px; /* 给内容区域增加圆角 */
+    max-width: 1080px; /* 将最大宽度设置为1080px */
+    margin: 20px auto; /* 居中对齐 */
+    overflow-x: auto; /* 防止内容溢出，启用水平滚动 */
+}
+
+.main-content iframe {
+    width: 100%; /* 保持Google Sheets原有宽度 */
+    height: 600px; /* 保持Google Sheets原有高度 */
+    border: none; /* 移除iframe的边框 */
+    overflow: hidden; /* 隐藏iframe内部超出的部分 */
+}
+
+.main-content.active {
+    margin-left: 700px; /* 菜单展开时，将内容区域进一步右移 */
+}
+
+select, input[type="number"] {
+    width: auto; /* 设置宽度为25%并扣除间距 */
+    padding: 10px;
+    margin: 10px 5px; /* 调整间距以符合设计 */
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    display: inline-block; /* 保持在一行显示 */
+    vertical-align: middle; /* 垂直对齐 */
+}
+
+button {
+    width: auto;
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px; /* 增加顶部间距 */
+}
+
+.form-group {
+    margin-bottom: 10px; /* 增加底部间距 */
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+
+.timer-display {
+    margin-top: 20px;
+    margin-bottom: 10px; /* 增加底部间距 */
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.flex-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 10px 0;
+}
+
+.form-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    margin: 10px 0;
+    justify-content: space-between;
+}
+
+.radio-group {
+    display: flex;
+    gap: 15px; /* 增加间距 */
+    align-items: center;
+    margin-top: 10px; /* 增加顶部间距 */
+}

@@ -66,6 +66,13 @@ body {
     border-radius: 10px; /* 给内容区域增加圆角 */
     max-width: 720px; /* 设置最大宽度 */
     margin: 20px auto; /* 居中对齐 */
+     /* 防止内容溢出 */
+}
+.main-content iframe {
+    width: 100%; /* 保持Google Sheets原有宽度 */
+    height: 600px; /* 保持Google Sheets原有高度 */
+    border: none; /* 移除iframe的边框 */
+    overflow: hidden; /* 隐藏iframe内部超出的部分 */
 }
 
 .main-content.active {

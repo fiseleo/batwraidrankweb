@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Side Menu Example</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>其他</title>
+    <link rel="stylesheet" href="page3.css">
 </head>
 <body>
 
@@ -13,8 +13,80 @@
     <!-- 主内容部分 -->
     <div class="main-content">
         <h1>其他</h1>
+        
+        <!-- Google Sheets Embed -->
+        <iframe src="https://docs.google.com/spreadsheets/u/0/d/e/2PACX-1vQGICxQAATkSBV12PY9RsxmG1vt4dKYj_e_UXBgWcSRiZTqKcvCkejN8TJtvVFsbJY0SQKZqgV0cW5Q/pubhtml?pli=1#widget=true&amp;headers=false"></iframe>
+
+        <h1>分數計算</h1>
+        
+        <div class="form-group" id="score-group">
+            <label for="server">伺服器:</label>
+            <select id="server">
+                <option value="1">國際服/日服</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="boss">BOSS:</label>
+            <select id="boss">
+                <option>薇娜</option>
+                <option>赫賽德</option>
+                <option>白&黑</option>
+                <option>耶羅尼姆斯</option>
+                <option>KAITEN FX Mk.0</option>
+                <option>佩洛洛吉拉</option>
+                <option>佩洛洛希拉</option>
+                <option>霍德</option>
+                <option>高茲</option>
+                <option>葛利果</option>
+                <option>氣墊船</option>
+                <option>黑影</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="difficulty">難度:</label>
+            <select id="difficulty">
+                <option value="NORMAL">NORMAL</option>
+                <option value="HARD">HARD</option>
+                <option value="VERYHARD">VERYHARD</option>
+                <option value="HARDCORE">HARDCORE</option>
+                <option value="EXTREME">EXTREME</option>
+                <option value="INSANE">INSANE</option>
+                <option value="TORMENT">TORMENT</option>
+            </select>
+        </div>
+
+        <div class="form-group" id="score-group">
+            <label for="score">分數:</label>
+            <input type="number" id="score" value="0" min="0">
+        </div>
+
+        <div class="form-group" id="time-group" style="display: none;">
+            <label for="time">用時 (分:秒:毫秒):</label>
+            <input type="text" id="time" placeholder="例如 5:30:300">
+        </div>
+        
+        <button id="calc-btn" class="btn-primary">計算分數</button>
+        <div class="timer-display" id="timer-display">分數: 00000000</div>
+
+        <div class="form-group">
+            <label for="countdown">倒數計時:</label>
+            <input type="number" id="countdown" value="60" min="0"> 分鐘
+        </div>
+        
+        <button id="start-btn" class="btn-primary">開始</button>
+        <div class="timer-display" id="countdown-display">00:00:00.000</div>
+
+        <div class="form-group">
+            <label for="calc-method">計算方式:</label>
+            <div class="radio-group">
+                <input type="radio" id="calc-time" name="calc-method">分數計算用時
+                <input type="radio" id="calc-used-time" name="calc-method" checked>已用時計算分數
+            </div>
+        </div>    
     </div>
-    
+
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             fetch("menu.html")
@@ -31,6 +103,32 @@
                         mainContent.classList.toggle('active');
                     });
                 });
+
+            // 切换输入框的显示状态
+            const calcTimeRadio = document.getElementById('calc-time');
+            const calcUsedTimeRadio = document.getElementById('calc-used-time');
+            const scoreGroup = document.getElementById('score-group');
+            const timeGroup = document.getElementById('time-group');
+            const calcBtn = document.getElementById('calc-btn');
+            const timerDisplay = document.getElementById('timer-display');
+
+            calcTimeRadio.addEventListener('change', function() {
+                if (this.checked) {
+                    scoreGroup.style.display = 'block';
+                    timeGroup.style.display = 'none';
+                    calcBtn.textContent = "計算時間";
+                    timerDisplay.textContent = "用時: 00:00.000";
+                }
+            });
+
+            calcUsedTimeRadio.addEventListener('change', function() {
+                if (this.checked) {
+                    scoreGroup.style.display = 'none';
+                    timeGroup.style.display = 'block';
+                    calcBtn.textContent = "計算分數";
+                    timerDisplay.textContent = "分數: 00000000";
+                }
+            });
         });
     </script>
 </body>
