@@ -61,12 +61,18 @@
             <input type="number" id="score" value="0" min="0">
         </div>
 
-        <div class="form-group" id="time-group" style="display: none;">
+        <div class="form-group" id="time-group">
             <label for="time">用時 (分:秒.毫秒):</label>
-            <input type="text" id="time" placeholder="例如 5:30.300">
+            <div id="time-inputs">
+                <input type="text" id="time" class="time-input" placeholder="例如 5:30.300">
+            </div>
+            <div class="button-row">
+                <button id="add-time-btn" class="btn-primary">新增用時</button>
+                <button id="calc-btn" class="btn-primary">計算分數</button>
+            </div>
         </div>
+        <button id="calc-time-btn" class="btn-primary">計算用時</button>
         
-        <button id="calc-btn" class="btn-primary">計算分數</button>
         <div class="timer-display" id="timer-display">分數: 00000000</div>
 
         <div class="form-group">
@@ -78,7 +84,7 @@
         <div class="timer-display" id="countdown-display">00:00:00.000</div>
 
         <div class="form-group">
-            <label>計算方式:</label> <!-- 移除不匹配的for屬性 -->
+            <label>計算方式:</label>
             <div class="radio-group">
                 <input type="radio" id="calc-time" name="calc-method" checked>分數計算用時
                 <input type="radio" id="calc-used-time" name="calc-method">已用時計算分數
@@ -87,58 +93,5 @@
     </div>
 
     <script src="calpoint.js"></script>
-
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            fetch("menu.html")
-                .then(response => response.text())
-                .then(data => {
-                    document.getElementById("menu-placeholder").innerHTML = data;
-
-                    const menuBtn = document.getElementById('menu-btn');
-                    const sideMenu = document.getElementById('side-menu');
-                    const mainContent = document.querySelector('.main-content');
-
-                    menuBtn.addEventListener('click', function() {
-                        sideMenu.classList.toggle('active');
-                        mainContent.classList.toggle('active');
-                    });
-                });
-
-            // 切换输入框的显示状态
-            const calcTimeRadio = document.getElementById('calc-time');
-            const calcUsedTimeRadio = document.getElementById('calc-used-time');
-            const scoreGroup = document.getElementById('score-group');
-            const timeGroup = document.getElementById('time-group');
-            const calcBtn = document.getElementById('calc-btn');
-            const timerDisplay = document.getElementById('timer-display');
-
-            // 設置頁面刷新後預設的狀態
-            if (calcTimeRadio.checked) {
-                scoreGroup.style.display = 'block';
-                timeGroup.style.display = 'none';
-                calcBtn.textContent = "計算時間";
-                timerDisplay.textContent = "用時: 00:00.000";
-            }
-
-            calcTimeRadio.addEventListener('change', function() {
-                if (this.checked) {
-                    scoreGroup.style.display = 'block';
-                    timeGroup.style.display = 'none';
-                    calcBtn.textContent = "計算時間";
-                    timerDisplay.textContent = "用時: 00:00.000";
-                }
-            });
-
-            calcUsedTimeRadio.addEventListener('change', function() {
-                if (this.checked) {
-                    scoreGroup.style.display = 'none';
-                    timeGroup.style.display = 'block';
-                    calcBtn.textContent = "計算分數";
-                    timerDisplay.textContent = "分數: 00000000";
-                }
-            });
-        });
-    </script>
 </body>
 </html>

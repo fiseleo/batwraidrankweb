@@ -139,3 +139,16 @@ button:hover {
     align-items: center;
     margin-top: 10px; /* 增加顶部间距 */
 }
+
+.button-row {
+    display: flex;
+    width: auto;
+    gap: 10px; /* 调整按钮间距 */
+    margin-top: 10px;
+}
+
+.btn-primary {
+    flex: auto; /* 按钮根据内容和容器宽度自适应宽度 */
+    padding: 5px 10px; /* 减少按钮的内边距 */
+    max-width: 80px; /* 减小最大宽度 */
+}
