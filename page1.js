@@ -35,6 +35,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 currentOffset = 0; // 重置偏移量
                 allRows = []; // 重置所有行数据
                 loadAllData(tableDropdown.value, db);
+                renderChart(db, tableDropdown.value); // 渲染图表
             });
 
             rowsPerPageDropdown.addEventListener('change', function() {
@@ -53,19 +54,15 @@ document.addEventListener("DOMContentLoaded", function() {
             const row = stmt.getAsObject();
             allRows.push(row);
         }
-        
-        // 只保留特定名次
+
         const filteredRows = allRows.filter(row => {
             const rank = parseInt(row.Rank);
-            return [1, 5, 10, 30, 50, 100, 500, 1000].includes(rank) || 
-                   (rank >= 1000 && rank % 1000 === 0) || 
-                   (rank >= 5000 && rank % 5000 === 0) ||
-                   (rank >= 10000 && rank % 10000 === 0) ||
-                   (rank >= 35000 && rank % 5000 === 0);
+            // 仅保留特定排名的数据
+            return [1, 5, 10, 30, 50, 100, 500, 1000, 2000, 3000, 4000, 10000, 20000, 30000, 40000].includes(rank) ||
+                   (rank >= 50000 && rank % 5000 === 0);  // 50000以后，每5000显示一次
         });
+
         allRows = filteredRows;
-        
-        // 清除重复的行
         const uniqueRows = [];
         const seenRanks = new Set();
         allRows.forEach(row => {
@@ -132,5 +129,90 @@ document.addEventListener("DOMContentLoaded", function() {
             paginationContainer.appendChild(nextButton);
         }
     }
+
+    function renderChart(db, tableName) {
+        const stmt = db.prepare(`SELECT BestRankingPoint FROM "${tableName}" ORDER BY BestRankingPoint DESC LIMIT 10000`);
+        const scoreCounts = {};
+        
+        while (stmt.step()) {
+            const row = stmt.getAsObject();
+            if (scoreCounts[row.BestRankingPoint]) {
+                scoreCounts[row.BestRankingPoint]++;
+            } else {
+                scoreCounts[row.BestRankingPoint] = 1;
+            }
+        }
+    
+        const sortedScores = Object.keys(scoreCounts).sort((a, b) => b - a); // 按分数降序排序
+        const sortedCounts = sortedScores.map(score => scoreCounts[score]); // 对应分数的计数
+    
+        // 计算累计人数
+        const cumulativeCounts = [];
+        let cumulativeSum = 0;
+        for (let count of sortedCounts) {
+            cumulativeSum += count;
+            cumulativeCounts.push(cumulativeSum);
+        }
+    
+        const ctx = document.getElementById('scoreChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar', // 使用普通的条形图类型
+            data: {
+                labels: sortedScores, // Y轴：分数
+                datasets: [{
+                    label: '人数',
+                    data: sortedCounts, // X轴：人数
+                    backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 0.8,
+                    barThickness: 3
+                }]
+            },
+            options: {
+                indexAxis: 'y', // 让Y轴变成X轴，X轴变成Y轴，以模拟水平条形图
+                
+                aspectRatio: 4,
+                //maintainAspectRatio: false,
+                scales: {
+                    x: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: '人數',
+                            font: {
+                                size: 14
+                            },
+                            color: '#FFFFFF'
+                        },
+                        tick: {
+                            size: 14
+                        },
+                        color: '#0800ff'
+                    },
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: '分數',
+                            font: {
+                                size: 14
+                            },
+                            color: '#FFFFFF'
+                        },
+                        tick: {
+                            size: 14
+                        },
+                        color: '#0800ff'
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                }
+            }
+        });
+    }
+    
     
 });
