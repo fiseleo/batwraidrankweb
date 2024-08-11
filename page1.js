@@ -1,9 +1,14 @@
 document.addEventListener("DOMContentLoaded", function() {
     const tableDropdown = document.getElementById('table-dropdown');
     const battleContainer = document.getElementById('battle-container');
+    const rowsPerPageDropdown = document.getElementById('rows-per-page');
 
-    if (!tableDropdown || !battleContainer) {
-        console.error("Element with id 'table-dropdown' or 'battle-container' not found.");
+    let currentLimit = parseInt(rowsPerPageDropdown.value); // 默认值为下拉菜单的初始值
+    let currentOffset = 0;
+    let allRows = []; // 存储所有的行数据，用于分页
+
+    if (!tableDropdown || !battleContainer || !rowsPerPageDropdown) {
+        console.error("Element with id 'table-dropdown', 'battle-container', or 'rows-per-page' not found.");
         return;
     }
 
@@ -25,68 +30,107 @@ document.addEventListener("DOMContentLoaded", function() {
                 tableDropdown.appendChild(option);
             });
 
-            // 监听下拉菜单的变化事件
+            // 监听下拉菜单和每页条目的变化事件
             tableDropdown.addEventListener('change', function() {
-                loadTableData(tableDropdown.value, db);
+                currentOffset = 0; // 重置偏移量
+                allRows = []; // 重置所有行数据
+                loadAllData(tableDropdown.value, db);
+            });
+
+            rowsPerPageDropdown.addEventListener('change', function() {
+                currentLimit = parseInt(this.value); // 更新每页条目数
+                currentOffset = 0; // 重置偏移量
+                loadTableData(currentLimit, currentOffset);
             });
         }).catch(err => console.error("Failed to fetch or process database:", err));
     }).catch(err => console.error("Failed to load SQL.js:", err));
 
-    function loadTableData(tableName, db) {
-        battleContainer.innerHTML = ''; // 清空之前的数据
-
-        const stmt = db.prepare(`SELECT id, date FROM ${tableName}`);
-
-        // 遍历查询结果并生成 HTML
-        let firstBattle;
-        let index = 0;
-
+    function loadAllData(tableName, db) {
+        const stmt = db.prepare(`SELECT id, BestRankingPoint, Rank FROM "${tableName}" ORDER BY BestRankingPoint DESC`);
+        
+        // 遍历查询结果并将数据插入表格
         while (stmt.step()) {
             const row = stmt.getAsObject();
-            const battleEntry = document.createElement('div');
-            battleEntry.className = 'battle-entry';
-
-            battleEntry.innerHTML = `
-                <div class="battle-header">
-                    <div class="battle-info">
-                        <div class="battle-number">${row.id}</div>
-                        <div class="battle-date">${row.date}</div>
-                    </div>
-                    <div class="battle-action">
-                        <button class="enter-button">選擇</button>
-                        <span class="drop-arrow">▼</span>
-                    </div>
-                </div>
-            `;
-
-            if (index === 0) {
-                firstBattle = battleEntry;
-            } else {
-                battleEntry.classList.add('additional-entry');
-                battleEntry.style.display = 'none'; // 初始状态下隐藏
-            }
-
-            battleContainer.appendChild(battleEntry);
-            index++;
+            allRows.push(row);
         }
+        
+        // 只保留特定名次
+        const filteredRows = allRows.filter(row => {
+            const rank = parseInt(row.Rank);
+            return [1, 5, 10, 30, 50, 100, 500, 1000].includes(rank) || 
+                   (rank >= 1000 && rank % 1000 === 0) || 
+                   (rank >= 5000 && rank % 5000 === 0) ||
+                   (rank >= 10000 && rank % 10000 === 0) ||
+                   (rank >= 35000 && rank % 5000 === 0);
+        });
+        allRows = filteredRows;
+        
+        // 清除重复的行
+        const uniqueRows = [];
+        const seenRanks = new Set();
+        allRows.forEach(row => {
+            if (!seenRanks.has(row.Rank)) {
+                seenRanks.add(row.Rank);
+                uniqueRows.push(row);
+            }
+        });
+        allRows = uniqueRows;
+        
+        loadTableData(currentLimit, currentOffset); // 加载当前页的数据
+    }
 
-        // 添加事件监听器
-        if (firstBattle) {
-            let isExpanded = false;
+    function loadTableData(limit = 8, offset = 0) {
+        const rankingTableBody = document.querySelector('.ranking-table tbody');
+        rankingTableBody.innerHTML = ''; // 清空表格内容
+        
+        const rowsToDisplay = allRows.slice(offset, offset + limit); // 获取当前页的数据
 
-            firstBattle.querySelector('.drop-arrow').addEventListener('click', function() {
-                const additionalEntries = document.querySelectorAll('.additional-entry');
+        // 插入数据到表格
+        rowsToDisplay.forEach((row, index) => {
+            const displayRank = `${row.Rank}位`; // 正确显示排名格式
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${displayRank}</td>
+                <td>${row.BestRankingPoint}</td>
+            `;
+            rankingTableBody.appendChild(tr);
+        });
 
-                if (isExpanded) {
-                    additionalEntries.forEach(entry => entry.style.display = 'none');
-                    this.textContent = '▼';
-                    isExpanded = false;
-                } else {
-                    additionalEntries.forEach(entry => entry.style.display = 'block');
-                    this.textContent = '▲';
-                    isExpanded = true;
-                }
+        updatePaginationControls(offset, limit);
+    }
+
+    function updatePaginationControls(offset, limit) {
+        const paginationContainer = document.querySelector('.pagination');
+        const paginationInfo = document.querySelector('.pagination-info'); // 获取分页信息元素
+        paginationContainer.innerHTML = ''; // 清空分页控件
+    
+        const totalPages = Math.ceil(allRows.length / limit);
+        const currentPage = Math.floor(offset / limit) + 1;
+    
+        // 更新分页信息
+        paginationInfo.textContent = `第 ${currentPage} 頁，共 ${totalPages} 頁`;
+        
+        // 创建 "上一頁" 按钮
+        if (currentPage > 1) {
+            const prevButton = document.createElement('button');
+            prevButton.textContent = "上一頁";
+            prevButton.className = 'enter-button';
+            prevButton.addEventListener('click', function() {
+                loadTableData(limit, offset - limit);
             });
+            paginationContainer.appendChild(prevButton);
+        }
+    
+        // 创建 "下一頁" 按钮
+        if (currentPage < totalPages) {
+            const nextButton = document.createElement('button');
+            nextButton.textContent = "下一頁";
+            nextButton.className = 'enter-button';
+            nextButton.addEventListener('click', function() {
+                loadTableData(limit, offset + limit);
+            });
+            paginationContainer.appendChild(nextButton);
         }
     }
+    
 });
