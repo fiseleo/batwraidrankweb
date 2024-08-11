@@ -79,13 +79,16 @@
         <div class="timer-display" id="countdown-display">00:00:00.000</div>
 
         <div class="form-group">
-            <label for="calc-method">計算方式:</label>
+            <label>計算方式:</label> <!-- 移除不匹配的for屬性 -->
             <div class="radio-group">
                 <input type="radio" id="calc-time" name="calc-method">分數計算用時
                 <input type="radio" id="calc-used-time" name="calc-method" checked>已用時計算分數
             </div>
         </div>    
     </div>
+
+    <script src="calpoint.js"></script>
+
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
@@ -123,7 +126,7 @@
 
             calcUsedTimeRadio.addEventListener('change', function() {
                 if (this.checked) {
-                    scoreGroup.style.display = 'none';
+                    scoreGroup.style.display = 'block';
                     timeGroup.style.display = 'block';
                     calcBtn.textContent = "計算分數";
                     timerDisplay.textContent = "分數: 00000000";
