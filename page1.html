@@ -13,15 +13,42 @@
     <!-- 主内容部分 -->
     <div class="main-content">
         <h1>總力戰</h1>
-        <div id="battle-container"></div>
         <div id="table-selector">
             <select id="table-dropdown">
-                <option value="" disabled selected>選擇總力戰</option>
+                <option value="" selected>選擇總力戰</option>
             </select>
+        <div id="battle-container"></div>
+        <!-- 表格与下拉菜单容器 -->
+        <div class="table-container">
+            <div class="table-header">
+            </div>
+            <table class="ranking-table">
+                <thead>
+                    <tr>
+                        <th>排名</th>
+                        <th>分數</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- 这里将会动态插入表格数据 -->
+                </tbody>
+            </table>
+            <div class="table-footer">
+                <select id="rows-per-page" class="dropdown">
+                    <option value="8">8行</option>
+                    <option value="16">16行</option>
+                    <option value="half">一半</option>
+                    <option value="all">全部</option>
+                </select>
+                <span class="pagination-info"></span> <!-- 分页信息 -->
+            </div>
+            <div class="pagination">
+                <!-- 这里将会动态插入分页指示器 -->
+            </div>
         </div>
-        
+        </div>
+
     </div>
-    
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.5.0/sql-wasm.js"></script>
     <script src="page1.js"></script>

@@ -175,7 +175,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function getBaseHPScore(difficulty) {
         const boss = bossSelect.value;
-        if (boss == '薇娜' || boss == 'KAITEN FX Mk.0') {
+        if (boss === '薇娜' || boss === 'KAITEN FX Mk.0') {
             switch (difficulty) {
                 case 'NORMAL': return 229000;
                 case 'HARD': return 458000;

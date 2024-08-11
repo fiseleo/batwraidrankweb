@@ -64,7 +64,7 @@ body {
     color: white; /* 设置文本颜色为白色以在深色背景上更清晰 */
     background-color: rgba(0, 0, 0, 0.8); /* 设置背景为半透明，确保文本可读性 */
     border-radius: 10px; /* 给内容区域增加圆角 */
-    max-width: 1000px; /* 设置最大宽度 */
+    max-width: 1980px; /* 设置最大宽度 */
     margin: 20px auto; /* 居中对齐 */
      /* 防止内容溢出 */
 }
@@ -116,13 +116,15 @@ body {
 
 .enter-button {
     background-color: #ffca28;
-    color: #333; /* 确保按钮文字颜色为深色 */
+    color: #333;
     border: none;
     border-radius: 4px;
-    padding: 5px 10px;
+    padding: 10px 20px;
     cursor: pointer;
     font-weight: bold;
+    margin-left: 10px; /* 确保按钮之间有一些间距 */
 }
+
 
 .enter-button:hover {
     background-color: #f5b301;
@@ -162,31 +164,39 @@ body {
     margin-bottom: 20px;
 }
 
+
 .table-header h2 {
     text-align: center;
     margin-bottom: 10px;
 }
 
 .ranking-table {
-    width: 100%;
+    width: 50%; /* 调整表格宽度为50% */
     border-collapse: collapse;
 }
 
 .ranking-table th, .ranking-table td {
-    padding: 10px;
+    padding: 8px;
     text-align: center;
     border: 1px solid #ccc;
+    background-color: rgba(0, 0, 0, 0.7); /* 设置表格单元格的背景为半透明黑色 */
+    color: white; /* 将文字颜色设置为白色 */
 }
-
-.ranking-table tbody tr:nth-child(even) {
-    background-color: #f9f9f9;
+.ranking-table tbody tr:nth-child {
+    background-color: rgba(50, 50, 50, 0.7);
 }
-
+.ranking-table {
+    width: 400px; /* 调整表格宽度为50% */ 
+    border-collapse: collapse;
+}
 .table-footer {
     margin-top: 10px;
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    justify-content: flex-start; /* 从左侧开始排列 */
+    width: 100%;
+    gap: 20px;
+    margin-left: 10PX;
 }
 
 .dropdown {
@@ -198,17 +208,27 @@ body {
 
 .pagination {
     display: flex;
+    justify-content: flex-start; /* 确保按钮靠左对齐 */
+    margin-left: 10px; /* 添加与分页信息之间的间距 */
+    gap: 10px;
+    margin-left: auto;
+}
+
+.pagination-controls {
+    display: flex;
     align-items: center;
+    justify-content: flex-start; /* 确保靠左对齐 */
+    margin-top: 10px;
 }
 
-.pagination div {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    background-color: #ddd;
-    margin: 0 5px;
+.pagination-info {
+    color: white; /* 确保在深色背景上可见 */
+    white-space: nowrap; /* 防止分页信息折行 */
+    margin-top: 20px;
+    margin-bottom: 15px;
+    flex-grow: 1; /* 使分页信息占据多余空间 */
 }
 
-.pagination div.active {
-    background-color: #6a5acd;
+.pagination-controls button {
+    margin-left: 10px; /* 为分页按钮添加间距 */
 }
