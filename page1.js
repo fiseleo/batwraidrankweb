@@ -1,9 +1,9 @@
-document.addEventListener("DOMContentLoaded", function () {
-    const tableSelector = document.getElementById('table-selector');
+document.addEventListener("DOMContentLoaded", function() {
+    const tableDropdown = document.getElementById('table-dropdown');
     const battleContainer = document.getElementById('battle-container');
 
-    if (!tableSelector || !battleContainer) {
-        console.error("Element with id 'table-selector' or 'battle-container' not found.");
+    if (!tableDropdown || !battleContainer) {
+        console.error("Element with id 'table-dropdown' or 'battle-container' not found.");
         return;
     }
 
@@ -17,16 +17,17 @@ document.addEventListener("DOMContentLoaded", function () {
             const tableNames = db.exec("SELECT name FROM sqlite_master WHERE type='table' AND name != 'sqlite_sequence';");
             console.log("Tables in database:", tableNames);
 
-            // 为每个表名生成一个选择项
+            // 为每个表名生成一个下拉菜单选项
             tableNames[0].values.forEach((table) => {
-                const button = document.createElement('button');
-                button.textContent = table[0];
-                button.className = 'table-button';
-                tableSelector.appendChild(button);
+                const option = document.createElement('option');
+                option.value = table[0];
+                option.textContent = table[0];
+                tableDropdown.appendChild(option);
+            });
 
-                button.addEventListener('click', function () {
-                    loadTableData(table[0], db);
-                });
+            // 监听下拉菜单的变化事件
+            tableDropdown.addEventListener('change', function() {
+                loadTableData(tableDropdown.value, db);
             });
         }).catch(err => console.error("Failed to fetch or process database:", err));
     }).catch(err => console.error("Failed to load SQL.js:", err));
@@ -58,8 +59,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 </div>
             `;
 
-
-
             if (index === 0) {
                 firstBattle = battleEntry;
             } else {
@@ -75,7 +74,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (firstBattle) {
             let isExpanded = false;
 
-            firstBattle.querySelector('.drop-arrow').addEventListener('click', function () {
+            firstBattle.querySelector('.drop-arrow').addEventListener('click', function() {
                 const additionalEntries = document.querySelectorAll('.additional-entry');
 
                 if (isExpanded) {

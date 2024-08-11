@@ -13,43 +13,13 @@
     <!-- 主内容部分 -->
     <div class="main-content">
         <h1>總力戰</h1>
-        
-        <!-- 表格与下拉菜单容器 -->
-        <div class="table-container">
-            <div class="table-header">
-                <h2>主要排名分数</h2>
-            </div>
-            <table class="ranking-table">
-                <thead>
-                    <tr>
-                        <th>排名</th>
-                        <th>分数</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- 这里将会动态插入表格数据 -->
-                </tbody>
-            </table>
-            <div class="table-footer">
-                <select id="rows-per-page" class="dropdown">
-                    <option value="8">8个条目</option>
-                    <option value="16">16个条目</option>
-                    <option value="half">一半</option>
-                    <option value="all">全部</option>
-                </select>
-                <div class="pagination">
-                    <!-- 这里将会动态插入分页指示器 -->
-                </div>
-            </div>
-        </div>
-        
-        <!-- 下拉菜单 -->
+        <div id="battle-container"></div>
         <div id="table-selector">
             <select id="table-dropdown">
                 <option value="" disabled selected>選擇總力戰</option>
             </select>
         </div>
-
+        
     </div>
     
 
