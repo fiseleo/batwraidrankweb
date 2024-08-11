@@ -222,9 +222,7 @@ document.addEventListener('DOMContentLoaded', function() {
         let milliseconds = parseInt(ms % 1000);
         let seconds = parseInt((ms / 1000) % 60);
         let minutes = parseInt((ms / (1000 * 60)) % 60);
-        let hours = parseInt((ms / (1000 * 60 * 60)) % 24);
-
-        return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}.${milliseconds.toString().padStart(3, '0')}`;
+        return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}.${milliseconds.toString().padStart(3, '0')}`;
     }
 
     const timeInputs = document.getElementById('time-inputs');
