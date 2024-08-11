@@ -6,6 +6,7 @@ document.addEventListener("DOMContentLoaded", function() {
     let currentLimit = parseInt(rowsPerPageDropdown.value); // 默认值为下拉菜单的初始值
     let currentOffset = 0;
     let allRows = []; // 存储所有的行数据，用于分页
+    let uniqueRows = []; // 存储去重后的数据
 
     if (!tableDropdown || !battleContainer || !rowsPerPageDropdown) {
         console.error("Element with id 'table-dropdown', 'battle-container', or 'rows-per-page' not found.");
@@ -36,6 +37,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 allRows = []; // 重置所有行数据
                 loadAllData(tableDropdown.value, db);
                 renderChart(db, tableDropdown.value); // 渲染图表
+                loadRanks(); // 加载特定名次的分数
             });
 
             rowsPerPageDropdown.addEventListener('change', function() {
@@ -63,7 +65,7 @@ document.addEventListener("DOMContentLoaded", function() {
         });
 
         allRows = filteredRows;
-        const uniqueRows = [];
+        uniqueRows = [];
         const seenRanks = new Set();
         allRows.forEach(row => {
             if (!seenRanks.has(row.Rank)) {
@@ -71,7 +73,6 @@ document.addEventListener("DOMContentLoaded", function() {
                 uniqueRows.push(row);
             }
         });
-        allRows = uniqueRows;
         
         loadTableData(currentLimit, currentOffset); // 加载当前页的数据
     }
@@ -80,7 +81,7 @@ document.addEventListener("DOMContentLoaded", function() {
         const rankingTableBody = document.querySelector('.ranking-table tbody');
         rankingTableBody.innerHTML = ''; // 清空表格内容
         
-        const rowsToDisplay = allRows.slice(offset, offset + limit); // 获取当前页的数据
+        const rowsToDisplay = uniqueRows.slice(offset, offset + limit); // 获取当前页的数据
 
         // 插入数据到表格
         rowsToDisplay.forEach((row, index) => {
@@ -101,7 +102,7 @@ document.addEventListener("DOMContentLoaded", function() {
         const paginationInfo = document.querySelector('.pagination-info'); // 获取分页信息元素
         paginationContainer.innerHTML = ''; // 清空分页控件
     
-        const totalPages = Math.ceil(allRows.length / limit);
+        const totalPages = Math.ceil(uniqueRows.length / limit);
         const currentPage = Math.floor(offset / limit) + 1;
     
         // 更新分页信息
@@ -170,9 +171,7 @@ document.addEventListener("DOMContentLoaded", function() {
             },
             options: {
                 indexAxis: 'y', // 让Y轴变成X轴，X轴变成Y轴，以模拟水平条形图
-                
                 aspectRatio: 4,
-                //maintainAspectRatio: false,
                 scales: {
                     x: {
                         beginAtZero: true,
@@ -183,11 +182,7 @@ document.addEventListener("DOMContentLoaded", function() {
                                 size: 14
                             },
                             color: '#FFFFFF'
-                        },
-                        tick: {
-                            size: 14
-                        },
-                        color: '#0800ff'
+                        }
                     },
                     y: {
                         beginAtZero: true,
@@ -198,11 +193,7 @@ document.addEventListener("DOMContentLoaded", function() {
                                 size: 14
                             },
                             color: '#FFFFFF'
-                        },
-                        tick: {
-                            size: 14
-                        },
-                        color: '#0800ff'
+                        }
                     }
                 },
                 plugins: {
@@ -213,6 +204,28 @@ document.addEventListener("DOMContentLoaded", function() {
             }
         });
     }
+
+    function loadRanks() {
+        // 从 uniqueRows 中获取第10000名的分数
+        const platinumRank = uniqueRows.find(row => row.Rank == 10000);
+        const platinumScore = platinumRank ? platinumRank.BestRankingPoint : 'N/A';
     
+        // 获取第50000名的分数
+        const goldRank = uniqueRows.find(row => row.Rank == 50000);
+        const goldScore = goldRank ? goldRank.BestRankingPoint : 'N/A';
     
+        // 获取第100000名的分数
+        const silverRank = uniqueRows.find(row => row.Rank == 100000);
+        const silverScore = silverRank ? silverRank.BestRankingPoint : 'N/A';
+    
+        // 调用函数来更新页面上的显示
+        updateRankDisplay(platinumScore, goldScore, silverScore);
+    }
+    
+
+    function updateRankDisplay(platinumScore, goldScore, silverScore) {
+        document.getElementById('platinum-score').textContent = platinumScore;
+        document.getElementById('gold-score').textContent = goldScore;
+        document.getElementById('silver-score').textContent = silverScore;
+    }
 });

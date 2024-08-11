@@ -17,37 +17,62 @@
             <select id="table-dropdown">
                 <option value="" selected>選擇總力戰</option>
             </select>
-        <div id="battle-container"></div>
-        <!-- 表格与下拉菜单容器 -->
-        <div class="table-container">
-            <div class="table-header">
-            </div>
-            <table class="ranking-table">
-                <thead>
-                    <tr>
-                        <th>排名</th>
-                        <th>分數</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- 这里将会动态插入表格数据 -->
-                </tbody>
-            </table>
-            <div class="table-footer">
-                <select id="rows-per-page" class="dropdown">
-                    <option value="8">8行</option>
-                    <option value="16">16行</option>
-                </select>
-                <span class="pagination-info"></span> <!-- 分页信息 -->
-            </div>
-            <div class="pagination">
-                <!-- 这里将会动态插入分页指示器 -->
-            </div>
-            <canvas id="scoreChart" width="800" height="400"></canvas>
-        </div>
+            <div id="battle-container"></div>
         </div>
 
+        <!-- 两列布局容器 -->
+        <div class="table-container">
+            <!-- 排名表 -->
+            <div class="ranking-table-container">
+                <table class="ranking-table">
+                    <thead>
+                        <tr>
+                            <th>排名</th>
+                            <th>分數</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- 这里将会动态插入表格数据 -->
+                    </tbody>
+                </table>
+                <div class="table-footer">
+                    <select id="rows-per-page" class="dropdown">
+                        <option value="8">8行</option>
+                        <option value="16">16行</option>
+                    </select>
+                    <span class="pagination-info"></span> <!-- 分页信息 -->
+                </div>
+                <div class="pagination">
+                    <!-- 这里将会动态插入分页指示器 -->
+                </div>
+            </div>
+
+            <!-- 档线信息 -->
+            <div class="rank-container">
+                <div class="rank-header">檔線</div>
+                <div class="rank-row">
+                    <div class="rank-item">
+                        <img src="icon/Platinum.png" alt="Platinum Image" class="rank-image">
+                        <div class="rank-title">Platinum</div>
+                        <div id="platinum-score" class="rank-score">N/A</div>
+                    </div>
+                    <div class="rank-item">
+                        <img src="icon/Gold.png" alt="Gold Image" class="rank-image">
+                        <div class="rank-title">Gold</div>
+                        <div id="gold-score" class="rank-score">N/A</div>
+                    </div>
+                    <div class="rank-item">
+                        <img src="icon/Silver.png" alt="Silver Image" class="rank-image">
+                        <div class="rank-title">Silver</div>
+                        <div id="silver-score" class="rank-score">N/A</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <canvas id="scoreChart" width="800" height="400"></canvas>
     </div>
+
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.5.0/sql-wasm.js"></script>
     <script src="page1.js"></script>

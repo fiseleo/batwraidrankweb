@@ -232,3 +232,65 @@ body {
 .pagination-controls button {
     margin-left: 10px; /* 为分页按钮添加间距 */
 }
+
+.table-container {
+    display: flex;
+    align-items: flex-start; /* 对齐子元素到容器顶部 */
+    gap: 5px; /* 进一步减少距离 */
+    padding-right: 0; /* 移除右侧内边距 */
+}
+
+.ranking-table-container {
+    flex: 2;
+    margin-right: 10px; /* 减少与档线部分的间距 */
+}
+
+.rank-container {
+    flex: 0 1 300px; /* 进一步减少档线部分的宽度 */
+    background-color: #007bff;
+    padding: 10px;
+    border-radius: 5px;
+    color: white;
+    text-align: left;
+    line-height: 1.5; /* 调整行高使内容更加可读 */
+    font-size: 16px; /* 调整字体大小 */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1250px; /* 向左移动 */
+    margin-top: 100px; /* 向下移动 */
+}
+
+.rank-header {
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.rank-row {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.rank-item {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-right: 10px;
+}
+
+.rank-title {
+    font-weight: bold;
+}
+
+.rank-score {
+    font-size: 1.2em;
+}
+
+.rank-image {
+    width: 50px; /* 根据需要调整图片的大小 */
+    height: auto;
+    margin-bottom: 5px; /* 图片和标题之间的间距 */
+}
+
