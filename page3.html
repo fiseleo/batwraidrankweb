@@ -19,7 +19,7 @@
 
         <h1>分數計算</h1>
         
-        <div class="form-group" id="score-group">
+        <div class="form-group" id="server-group">
             <label for="server">伺服器:</label>
             <select id="server">
                 <option value="1">國際服/日服</option>
@@ -80,14 +80,13 @@
         <div class="form-group">
             <label>計算方式:</label> <!-- 移除不匹配的for屬性 -->
             <div class="radio-group">
-                <input type="radio" id="calc-time" name="calc-method">分數計算用時
-                <input type="radio" id="calc-used-time" name="calc-method" checked>已用時計算分數
+                <input type="radio" id="calc-time" name="calc-method" checked>分數計算用時
+                <input type="radio" id="calc-used-time" name="calc-method">已用時計算分數
             </div>
         </div>    
     </div>
 
     <script src="calpoint.js"></script>
-
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
@@ -114,6 +113,14 @@
             const calcBtn = document.getElementById('calc-btn');
             const timerDisplay = document.getElementById('timer-display');
 
+            // 設置頁面刷新後預設的狀態
+            if (calcTimeRadio.checked) {
+                scoreGroup.style.display = 'block';
+                timeGroup.style.display = 'none';
+                calcBtn.textContent = "計算時間";
+                timerDisplay.textContent = "用時: 00:00.000";
+            }
+
             calcTimeRadio.addEventListener('change', function() {
                 if (this.checked) {
                     scoreGroup.style.display = 'block';
@@ -125,7 +132,7 @@
 
             calcUsedTimeRadio.addEventListener('change', function() {
                 if (this.checked) {
-                    scoreGroup.style.display = 'block';
+                    scoreGroup.style.display = 'none';
                     timeGroup.style.display = 'block';
                     calcBtn.textContent = "計算分數";
                     timerDisplay.textContent = "分數: 00000000";

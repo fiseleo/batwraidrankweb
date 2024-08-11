@@ -11,18 +11,18 @@ document.addEventListener('DOMContentLoaded', function() {
     let isRunning = false;
     let interval;
 
-    // 点击事件处理
+    
     calcBtn.addEventListener('click', () => {
         const calcMethod = document.querySelector('input[name="calc-method"]:checked').id; // 动态获取用户选择的计算方式
 
         if (calcMethod === 'calc-used-time') {
-            calculateScoreFromTime(); // 根据用时计算分数
+            calculateScoreFromTime(); 
         } else {
-            calculateTimeFromScore(); // 根据分数计算用时
+            calculateTimeFromScore(); 
         }
     });
 
-    // 根据分数计算时间
+    
     function calculateTimeFromScore() {
         console.log('計算時間按鈕已點擊');
 
@@ -53,7 +53,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // 根据时间计算分数
+    
     function calculateScoreFromTime() {
         console.log('計算分數按鈕已點擊');
 
@@ -80,7 +80,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // 倒计时功能
     startBtn.addEventListener('click', () => {
         if (isRunning) {
             clearInterval(interval);
@@ -114,6 +113,19 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function getBaseHPScore(difficulty) {
+        const boss = bossSelect.value;
+        if (boss == '薇娜' || boss == 'KAITEN FX Mk.0') {
+            switch (difficulty) {
+                case 'NORMAL': return 229000;
+                case 'HARD': return 458000;
+                case 'VERYHARD': return 916000;
+                case 'HARDCORE': return 1832000;
+                case 'EXTREME': return 5392000;
+                case 'INSANE': return 12449600;
+                case 'TORMENT': return 18876000;
+                default: return 0;
+            }
+        }
         switch (difficulty) {
             case 'NORMAL': return 227000;
             case 'HARD': return 554000;
