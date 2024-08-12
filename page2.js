@@ -163,7 +163,7 @@ document.addEventListener("DOMContentLoaded", function() {
             data: {
                 labels: sortedScores,
                 datasets: [{
-                    label: '累积人数',
+                    label: '累積人数',
                     data: cumulativeCounts,
                     backgroundColor: 'rgba(54, 162, 235, 0.6)',
                     borderColor: 'rgba(54, 162, 235, 1)',
