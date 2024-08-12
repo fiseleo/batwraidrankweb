@@ -144,10 +144,8 @@ document.addEventListener("DOMContentLoaded", function() {
             }
         }
     
-        const sortedScores = Object.keys(scoreCounts).sort((a, b) => b - a); // 按分数降序排序
-        const sortedCounts = sortedScores.map(score => scoreCounts[score]); // 对应分数的计数
-    
-        // 计算累计人数
+        const sortedScores = Object.keys(scoreCounts).sort((a, b) => b - a);
+        const sortedCounts = sortedScores.map(score => scoreCounts[score]);
         const cumulativeCounts = [];
         let cumulativeSum = 0;
         for (let count of sortedCounts) {
@@ -156,28 +154,33 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     
         const ctx = document.getElementById('scoreChart').getContext('2d');
+    
+        const maxScore = Math.max(...sortedScores);
+        const minScore = Math.min(...sortedScores);
+    
         new Chart(ctx, {
-            type: 'bar', // 使用普通的条形图类型
+            type: 'bar',
             data: {
-                labels: sortedScores, // Y轴：分数
+                labels: sortedScores,
                 datasets: [{
-                    label: '人数',
-                    data: sortedCounts, // X轴：人数
+                    label: '累积人数',
+                    data: cumulativeCounts,
                     backgroundColor: 'rgba(54, 162, 235, 0.6)',
                     borderColor: 'rgba(54, 162, 235, 1)',
                     borderWidth: 0.8,
-                    barThickness: 3
+                    barThickness: 10
                 }]
             },
             options: {
-                indexAxis: 'y', // 让Y轴变成X轴，X轴变成Y轴，以模拟水平条形图
+                animation: false,
+                indexAxis: 'y',
                 aspectRatio: 4,
                 scales: {
                     x: {
                         beginAtZero: true,
                         title: {
                             display: true,
-                            text: '人數',
+                            text: '累積人數',
                             font: {
                                 size: 14
                             },
@@ -185,7 +188,7 @@ document.addEventListener("DOMContentLoaded", function() {
                         }
                     },
                     y: {
-                        beginAtZero: true,
+                        beginAtZero: false,
                         title: {
                             display: true,
                             text: '分數',
@@ -193,6 +196,10 @@ document.addEventListener("DOMContentLoaded", function() {
                                 size: 14
                             },
                             color: '#FFFFFF'
+                        },
+                        ticks: {
+                            maxTicksLimit: 8,  // 将Y轴分成最多8段
+                            
                         }
                     }
                 },
@@ -203,8 +210,8 @@ document.addEventListener("DOMContentLoaded", function() {
                 }
             }
         });
-    }
-
+    }    
+    
     function loadRanks() {
         // 从 uniqueRows 中获取第10000名的分数
         const platinumRank = uniqueRows.find(row => row.Rank == 10000);
