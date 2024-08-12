@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh_tw">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>關於我</title>
+    <link rel="stylesheet" href="about.css">
+</head>
+<body>
+
+    <div id="menu-placeholder"></div>
+
+    <!-- 主内容部分 -->
+    <div class="main-content">
+        <h1>關於我</h1>
+        <h1>作者 afiseleo</h1>
+        <h1>總力作業的作者 林晴</h1>
+        
+        <p>
+            項目程式碼 <a href="https://github.com/fiseleo/batwraidrankweb" target="_blank">github</a> 
+        </p>
+    </div>
+    
+
+
+    
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            fetch("menu.html")
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById("menu-placeholder").innerHTML = data;
+
+                    const menuBtn = document.getElementById('menu-btn');
+                    const sideMenu = document.getElementById('side-menu');
+                    const mainContent = document.querySelector('.main-content');
+
+                    menuBtn.addEventListener('click', function() {
+                        sideMenu.classList.toggle('active');
+                        mainContent.classList.toggle('active');
+                    });
+                });
+        });
+    </script>
+</body>
+</html>

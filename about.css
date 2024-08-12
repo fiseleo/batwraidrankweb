@@ -1,0 +1,80 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-image: url('Main.png');
+    background-size: cover; /* 使背景图片覆盖整个页面 */
+    background-position: center; /* 居中对齐背景图片 */
+    background-repeat: no-repeat; /* 防止背景图片重复 */
+    background-attachment: fixed; /* 背景图片固定在页面，不随内容滚动 */
+    height: 100vh; /* 让背景覆盖整个视窗高度 */
+}
+
+.menu-btn {
+    position: fixed;
+    left: 10px;
+    top: 10px;
+    font-size: 24px;
+    cursor: pointer;
+    z-index: 1001;
+    color: white; /* 白色按钮文字 */
+    background-color: rgb(0, 0, 0 ,0.8); /* 按钮背景为半透明黑色 */
+    padding: 10px 15px;
+    border-radius: 5px;
+    border: none;
+}
+
+.menu-btn:hover {
+    background-color: #555;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* 鼠标悬停时增加阴影效果 */
+}
+.side-menu {
+    height: 100%;
+    width: 250px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: #111;
+    overflow-x: hidden;
+    padding-top: 60px;
+    transition: transform 0.5s ease;
+    transform: translateX(-250px); /* 初始状态下隐藏在左侧 */
+    z-index: 1000;
+}
+
+.side-menu a {
+    padding: 10px 15px;
+    text-decoration: none;
+    font-size: 20px;
+    color: white;
+    display: block;
+    transition: 0.3s;
+}
+
+.side-menu a:hover {
+    background-color: #575757;
+}
+
+.side-menu.active {
+    transform: translateX(0);
+}
+
+.main-content {
+    padding: 20px;
+    color: white; /* 设置文本颜色为白色以在深色背景上更清晰 */
+    background-color: rgba(0, 0, 0, 1); /* 设置背景为半透明，确保文本可读性 */
+    border-radius: 10px; /* 给内容区域增加圆角 */
+    max-width: 720px; /* 设置最大宽度 */
+    margin: 20px auto; /* 居中对齐 */
+     /* 防止内容溢出 */
+}
+.main-content iframe {
+    width: 100%; /* 保持Google Sheets原有宽度 */
+    height: 600px; /* 保持Google Sheets原有高度 */
+    border: none; /* 移除iframe的边框 */
+    overflow: hidden; /* 隐藏iframe内部超出的部分 */
+}
+
+.main-content.active {
+    margin-left: 700px; /* 菜单展开时，将内容区域进一步右移 */
+}
