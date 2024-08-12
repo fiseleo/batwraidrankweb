@@ -7,30 +7,55 @@ document.addEventListener("DOMContentLoaded", function() {
     let raidBossGroupMap = {};
     let mechNames = [];
 
-    // 加载映射表 JSON 文件
-    fetch(raidBossGroupMapURL)
-        .then(response => response.json())
-        .then(data => {
-            raidBossGroupMap = data;
+    // 使用 Promise.all 并行加载所有 JSON 文件
+    Promise.all([
+        fetch(raidBossGroupMapURL).then(response => response.json()),
+        fetch(mechNamesURL).then(response => response.json()),
+        fetch(raidSeasonURL).then(response => response.json()),
+        fetch(eliminateRaidSeasonURL).then(response => response.json())
+    ])
+    .then(([raidBossGroupMapData, mechNamesData, raidSeasonData, eliminateRaidSeasonData]) => {
+        raidBossGroupMap = raidBossGroupMapData;
+        mechNames = mechNamesData.mechNames;
 
-            return fetch(mechNamesURL);
-        })
-        .then(response => response.json())
-        .then(data => {
-            mechNames = data.mechNames;
+        // 比较两个数据集，选择最接近当前日期的那个
+        const closestRaidData = getClosestRaidData(raidSeasonData, eliminateRaidSeasonData);
 
-            // 加载和显示数据
-            fetchAndDisplayData(raidSeasonURL, false);  // 处理第一个 JSON 文件
-            fetchAndDisplayData(eliminateRaidSeasonURL, true);  // 处理第二个 JSON 文件
-        })
-        .catch(error => console.error('Error loading JSON files:', error));
+        // 处理并显示最近的 RAID 数据
+        processRaidData(closestRaidData);
+    })
+    .catch(error => console.error('Error loading JSON files:', error));
+
+    function getClosestRaidData(raidSeasonData, eliminateRaidSeasonData) {
+        const now = new Date();
+
+        const closestRaidSeason = raidSeasonData.reduce((closest, current) => {
+            const closestDate = new Date(closest.SeasonStartData);
+            const currentDate = new Date(current.SeasonStartData);
+            return Math.abs(currentDate - now) < Math.abs(closestDate - now) ? current : closest;
+        });
+
+        const closestEliminateRaidSeason = eliminateRaidSeasonData.reduce((closest, current) => {
+            const closestDate = new Date(closest.SeasonStartData);
+            const currentDate = new Date(current.SeasonStartData);
+            return Math.abs(currentDate - now) < Math.abs(closestDate - now) ? current : closest;
+        });
+
+        const closestRaidSeasonDate = new Date(closestRaidSeason.SeasonStartData);
+        const closestEliminateRaidSeasonDate = new Date(closestEliminateRaidSeason.SeasonStartData);
+
+        // 比较两个最近的时间，返回最接近当前时间的那个
+        return Math.abs(closestRaidSeasonDate - now) < Math.abs(closestEliminateRaidSeasonDate - now)
+            ? closestRaidSeason
+            : closestEliminateRaidSeason;
+    }
 
     function convertRaidBossGroupName(groupName) {
         const parts = groupName.split('_');
         let environment = '';
         let mech = '';
         let armorType = '';
-        let originalMechPart = ''; // 用于保存原始的mech部分
+        let originalMechPart = '';
 
         parts.forEach(part => {
             if (raidBossGroupMap[part]) {
@@ -38,7 +63,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     environment = raidBossGroupMap[part];
                 } else if (mechNames.includes(part)) {
                     mech = raidBossGroupMap[part];
-                    originalMechPart = part; // 保存原始的mech部分
+                    originalMechPart = part;
                 } else {
                     armorType = raidBossGroupMap[part];
                     switch (part) {
@@ -61,90 +86,74 @@ document.addEventListener("DOMContentLoaded", function() {
 
         return {
             displayName: `${environment}${mech}<span style="color: ${armorColor};">${armorType}</span>`,
-            mechPart: originalMechPart // 返回原始的mech部分
+            mechPart: originalMechPart
         };
     }
 
-    function fetchAndDisplayData(url, isEliminate) {
-        fetch(url)
-            .then(response => response.json())
-            .then(data => {
-                const closestSeason = data.reduce((closest, current) => {
-                    const closestDate = new Date(closest.SeasonStartData);
-                    const currentDate = new Date(current.SeasonStartData);
-                    return (currentDate > closestDate) ? current : closest;
-                });
+    function processRaidData(closestSeason) {
+        const startDate = new Date(closestSeason.SeasonStartData);
+        const endDate = new Date(closestSeason.SeasonEndData);
+        startDate.setHours(startDate.getHours() - 1);
+        endDate.setHours(endDate.getHours() - 1);
 
-                const startDate = new Date(closestSeason.SeasonStartData);
-                const endDate = new Date(closestSeason.SeasonEndData);
-                startDate.setHours(startDate.getHours() - 1);
-                endDate.setHours(endDate.getHours() - 1);
+        const options = { year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' };
+        const formattedStartDate = startDate.toLocaleString('zh-TW', options);
+        const formattedEndDate = endDate.toLocaleString('zh-TW', options);
 
-                const options = { year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' };
-                const formattedStartDate = startDate.toLocaleString('zh-TW', options);
-                const formattedEndDate = endDate.toLocaleString('zh-TW', options);
+        let raidBossGroups;
+        if (closestSeason.OpenRaidBossGroup01) {
+            raidBossGroups = [
+                closestSeason.OpenRaidBossGroup01,
+                closestSeason.OpenRaidBossGroup02,
+                closestSeason.OpenRaidBossGroup03
+            ];
+        } else {
+            raidBossGroups = closestSeason.OpenRaidBossGroup;
+        }
 
-                let raidBossGroups;
-                if (isEliminate) {
-                    raidBossGroups = [
-                        closestSeason.OpenRaidBossGroup01,
-                        closestSeason.OpenRaidBossGroup02,
-                        closestSeason.OpenRaidBossGroup03
-                    ];
-                } else {
-                    raidBossGroups = closestSeason.OpenRaidBossGroup;
-                }
+        const displayDiv = document.getElementById('raid-boss-group');
+        displayDiv.innerHTML = `<h2>開始時間: ${formattedStartDate}</h2>`;
+        displayDiv.innerHTML += `<h2>結束時間: ${formattedEndDate}</h2>`;
 
-                const displayDiv = document.getElementById('raid-boss-group');
-                displayDiv.innerHTML = `<h2>開始時間: ${formattedStartDate}</h2>`;
-                displayDiv.innerHTML += `<h2>結束時間: ${formattedEndDate}</h2>`;
-                // 创建“目前開放”行的容器
-                const openNowContainer = document.createElement('div');
-                openNowContainer.style.display = 'flex';
-                openNowContainer.style.alignItems = 'center';
-                
-                // 添加“目前開放:”文本
-                const openNowText = document.createElement('h2');
-                openNowText.textContent = '目前開放的是:';
-                openNowContainer.appendChild(openNowText);
+        const openNowContainer = document.createElement('div');
+        openNowContainer.style.display = 'flex';
+        openNowContainer.style.alignItems = 'center';
+        
+        const openNowText = document.createElement('h2');
+        openNowText.textContent = '目前開放的是:';
+        openNowContainer.appendChild(openNowText);
 
-                // 添加图片
-                let imageLoaded = false;
-                raidBossGroups.forEach(group => {
-                    const { displayName, mechPart } = convertRaidBossGroupName(group);
-                    
-                    if (!imageLoaded) {
-                        const imgFileName = `Raidboss_${mechPart}.png`;  // 使用原始mech部分生成文件名
-                        const imgFilePath = `icon/${imgFileName}`;  // 根据实际路径调整
+        let imageLoaded = false;
+        raidBossGroups.forEach(group => {
+            const { displayName, mechPart } = convertRaidBossGroupName(group);
+            
+            if (!imageLoaded) {
+                const imgFileName = `Raidboss_${mechPart}.png`;
+                const imgFilePath = `icon/${imgFileName}`;
 
-                        const img = document.createElement('img');
-                        img.src = imgFilePath;
-                        img.alt = `${displayName} Image`;
-                        img.style.width = '100px'; // 设定图片宽度
-                        img.style.marginLeft = '10px'; // 添加图片和文字之间的间距
+                const img = document.createElement('img');
+                img.src = imgFilePath;
+                img.alt = `${displayName} Image`;
+                img.style.width = '100px';
+                img.style.marginLeft = '10px';
 
-                        openNowContainer.appendChild(img);
-                        imageLoaded = true;  // 确保只加载一次图片
-                    }
+                openNowContainer.appendChild(img);
+                imageLoaded = true;
+            }
 
-                    // 添加每个开放项目的名称
-                    const groupContainer = document.createElement('div');
-                    groupContainer.style.display = 'flex';
-                    groupContainer.style.alignItems = 'center';
+            const groupContainer = document.createElement('div');
+            groupContainer.style.display = 'flex';
+            groupContainer.style.alignItems = 'center';
 
-                    const textElement = document.createElement('p');
-                    textElement.innerHTML = displayName;
-                    groupContainer.appendChild(textElement);
-                    displayDiv.appendChild(groupContainer);
-                });
+            const textElement = document.createElement('p');
+            textElement.innerHTML = displayName;
+            groupContainer.appendChild(textElement);
+            displayDiv.appendChild(groupContainer);
+        });
 
-                // 将“目前開放:”行添加到页面
-                displayDiv.prepend(openNowContainer);
+        displayDiv.prepend(openNowContainer);
 
-                // 添加倒计时
-                addCountdown(startDate);
-            })
-            .catch(error => console.error('Error loading the JSON file:', error));
+        addCountdown(startDate);
     }
 
     function addCountdown(startDate) {
