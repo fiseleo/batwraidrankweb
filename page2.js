@@ -2,7 +2,8 @@ document.addEventListener("DOMContentLoaded", function() {
     const tableDropdown = document.getElementById('table-dropdown');
     const battleContainer = document.getElementById('battle-container');
     const rowsPerPageDropdown = document.getElementById('rows-per-page');
-
+    
+    let chartInstance;
     let currentLimit = parseInt(rowsPerPageDropdown.value); // 默认值为下拉菜单的初始值
     let currentOffset = 0;
     let allRows = []; // 存储所有的行数据，用于分页
@@ -134,7 +135,7 @@ document.addEventListener("DOMContentLoaded", function() {
     function renderChart(db, tableName) {
         const stmt = db.prepare(`SELECT BestRankingPoint FROM "${tableName}" ORDER BY BestRankingPoint DESC LIMIT 10000`);
         const scoreCounts = {};
-        
+
         while (stmt.step()) {
             const row = stmt.getAsObject();
             if (scoreCounts[row.BestRankingPoint]) {
@@ -143,7 +144,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 scoreCounts[row.BestRankingPoint] = 1;
             }
         }
-    
+
         const sortedScores = Object.keys(scoreCounts).sort((a, b) => b - a);
         const sortedCounts = sortedScores.map(score => scoreCounts[score]);
         const cumulativeCounts = [];
@@ -152,13 +153,15 @@ document.addEventListener("DOMContentLoaded", function() {
             cumulativeSum += count;
             cumulativeCounts.push(cumulativeSum);
         }
-    
+
         const ctx = document.getElementById('scoreChart').getContext('2d');
-    
-        const maxScore = Math.max(...sortedScores);
-        const minScore = Math.min(...sortedScores);
-    
-        new Chart(ctx, {
+
+        // 在创建新图表之前，销毁旧图表实例
+        if (chartInstance) {
+            chartInstance.destroy();
+        }
+
+        chartInstance = new Chart(ctx, {
             type: 'bar',
             data: {
                 labels: sortedScores,
@@ -199,7 +202,6 @@ document.addEventListener("DOMContentLoaded", function() {
                         },
                         ticks: {
                             maxTicksLimit: 8,  // 将Y轴分成最多8段
-                            
                         }
                     }
                 },
