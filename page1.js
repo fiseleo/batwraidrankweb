@@ -61,8 +61,8 @@ document.addEventListener("DOMContentLoaded", function() {
         const filteredRows = allRows.filter(row => {
             const rank = parseInt(row.Rank);
             // 仅保留特定排名的数据
-            return [1, 5, 10, 30, 50, 100, 500, 1000, 2000, 3000, 4000, 10000, 20000, 30000, 40000].includes(rank) ||
-                   (rank >= 50000 && rank % 5000 === 0);  // 50000以后，每5000显示一次
+            return [1, 5, 10, 30, 50, 100, 500, 1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000, 20000, 30000, 40000].includes(rank) ||
+                   (rank >= 50000 && rank % 10000 === 0);  // 50000以后，每5000显示一次
         });
 
         allRows = filteredRows;
